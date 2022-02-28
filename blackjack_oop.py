@@ -1,4 +1,5 @@
 import random
+import time
 
 STAKE = 10
 START_POCKET = 1000
@@ -40,7 +41,9 @@ class Hand:
         print(f'Cards: ', end="")
         for card in self.cards:
             print(f'[{card}]', end=" ")
-        print(f'\nValue: {self.value}')
+        time.sleep(0.5)
+        print(f'\nValue: {self.value}\n')
+        time.sleep(2)
 
     def is_bust(self):
         if self.value > 21:
@@ -60,18 +63,19 @@ class Player(Hand):
     def decision(self, other):
         while True:
             if self.value < 21:
-                answer = input('(H)it / (S)tand: ')
+                answer = input('What\'s your decision? (H)it / (S)tand: ')
+                print('')
                 if answer.upper() == 'H':
                     print('Player draws another card:')
                     self.draw_cards(1)
                     self.ace_value()
                     self.show()
-                    other.show()
                     continue
                 elif answer.upper() == 'S':
                     return False
             else:
                 return True
+        other.show()
 
     def is_blackjack(self):
         if self.value == 21 and len(self.cards) == 2:
@@ -83,10 +87,10 @@ class Player(Hand):
 class Opponent(Hand):
     def decision(self, other):
         while self.value < 17 and self.value < other.value:
+            time.sleep(2)
             print('Opponent draws another card:')
             self.draw_cards(1)
             self.ace_value()
-            other.show()
             self.show()
 
 def main():
@@ -95,12 +99,17 @@ def main():
     balance = START_POCKET
     rounds = 0
 
+    print('Welcome to Blackjack!\n')
+    time.sleep(2)
+
     while play:
         player_hand = Player()
         opp_hand = Opponent()
         score = -STAKE
         rounds += 1
 
+        print('Drawing player\'s cards:')
+        time.sleep(2)
         player_hand.draw_cards(2)
         blackjack = player_hand.is_blackjack()
         player_hand.show()
@@ -109,6 +118,8 @@ def main():
             score += STAKE*2.5
             print('Blackjack!')
         else:
+            print('Drawing opponent\'s card:')
+            time.sleep(2)
             opp_hand.draw_cards(1)
             opp_hand.show()
             player_hand.decision(opp_hand)
@@ -135,7 +146,8 @@ def main():
         print('Round score:', int(score))
         print(f'Balance:', int(balance))
         while True:
-            answer = input('Do you want to play again? (Y/N): ')
+            answer = input('\nDo you want to play again? (Y)es/(N)o: ')
+            print('')
             if answer.upper() == 'Y':
                 break
             elif answer.upper() == 'N':
