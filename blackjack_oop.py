@@ -48,10 +48,8 @@ class Hand:
     def is_bust(self):
         if self.value > 21:
             return True
-        else:
-            return False
 
-    def ace_value(self):
+    def reduce_ace_value(self):
         if any(card == 'A' for card in self.cards) and self.value > 21:
             idx = self.cards.index('A')
             self.cards[idx] = 'A*'
@@ -68,7 +66,7 @@ class Player(Hand):
                 if answer.upper() == 'H':
                     print('Player draws another card:')
                     self.draw_cards(1)
-                    self.ace_value()
+                    self.reduce_ace_value()
                     self.show()
                     continue
                 elif answer.upper() == 'S':
@@ -90,8 +88,9 @@ class Opponent(Hand):
             time.sleep(2)
             print('Opponent draws another card:')
             self.draw_cards(1)
-            self.ace_value()
+            self.reduce_ace_value()
             self.show()
+
 
 def main():
 
